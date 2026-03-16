@@ -11,10 +11,9 @@
         :root {
             --bg: #000000;
             --white: #ffffff;
-            --accent: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --gold: #D4AF37;
+            --border: rgba(255, 255, 255, 0.1);
             --font-bold: 'Syncopate', sans-serif;
-            --bezier: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair !important; }
@@ -23,244 +22,207 @@
             background: var(--bg);
             color: var(--white);
             font-family: 'Inter', sans-serif;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
-            overflow-x: hidden;
-            perspective: 1200px;
+            overflow: hidden; /* Prevents scrolling */
         }
 
-        /* --- BACKGROUND --- */
+        /* --- SIGNATURE LOGO (TOP LEFT) --- */
+        .sig-container {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .sig-text {
+            font-family: var(--font-bold);
+            font-size: 1.2rem;
+            z-index: 2;
+            letter-spacing: -2px;
+        }
+
+        .sig-t { color: var(--gold); }
+
+        .sig-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--gold);
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: morph 6s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes morph {
+            0% { transform: rotate(0deg); border-color: var(--gold); }
+            50% { border-color: #fff; }
+            100% { transform: rotate(360deg); border-color: var(--gold); }
+        }
+
+        /* --- BACKGROUND GRID --- */
         .bg-canvas {
             position: fixed;
-            inset: -50px;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 60px 60px;
+            inset: 0;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
             z-index: -1;
-            mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 80%);
+            mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 70%);
         }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            position: fixed;
-            left: 0; top: 0; bottom: 0;
-            width: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            z-index: 100;
-            border-right: 1px solid var(--border);
-            background: rgba(255,255,255,0.02);
-        }
-
-        .side-trigger {
-            writing-mode: vertical-rl;
-            text-transform: uppercase;
-            font-family: var(--font-bold);
-            font-size: 0.75rem;
-            letter-spacing: 5px;
-            color: var(--white);
-            transform: rotate(180deg);
-            text-decoration: none;
-        }
-
-        .burger-lines { display: flex; flex-direction: column; gap: 5px; padding: 20px; transition: 0.3s; }
-        .burger-lines:hover { opacity: 0.5; }
-        .line { width: 25px; height: 2px; background: var(--white); }
-
-        /* --- MAIN WRAPPER --- */
+        /* --- COMPACT WRAPPER --- */
         .wrapper {
             width: 100%;
-            max-width: 480px;
-            padding: 80px 20px;
-            z-index: 10;
-            transform-style: preserve-3d;
+            max-width: 380px;
+            text-align: center;
+            padding: 20px;
         }
 
-        header { text-align: center; margin-bottom: 50px; }
-        .pfp-frame {
-            width: 110px; height: 110px;
-            margin: 0 auto 25px;
+        .pfp {
+            width: 80px; height: 80px;
             border: 1px solid var(--white);
-            padding: 5px;
-            background: #000;
+            padding: 4px;
+            margin: 0 auto 15px;
         }
-        .pfp-frame img { width: 100%; height: 100%; object-fit: cover; }
-        h1 { font-family: var(--font-bold); font-size: 1.1rem; letter-spacing: 8px; text-transform: uppercase; }
+        .pfp img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
 
-        /* --- TABS --- */
+        h1 { 
+            font-family: var(--font-bold); 
+            font-size: 0.9rem; 
+            letter-spacing: 5px; 
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* --- TABS & LINKS --- */
         .tab-group { border-top: 1px solid var(--border); }
-        .tab { border-bottom: 1px solid var(--border); }
-        .tab-header {
-            padding: 25px 0;
-            display: flex;
-            justify-content: space-between;
+        
+        .tab-btn {
+            width: 100%;
+            padding: 15px 0;
             background: none;
             border: none;
-            width: 100%;
+            border-bottom: 1px solid var(--border);
             color: var(--white);
             font-family: var(--font-bold);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             letter-spacing: 3px;
+            display: flex;
+            justify-content: space-between;
+            transition: 0.3s;
         }
 
-        .social-row { display: flex; justify-content: center; gap: 40px; padding: 30px 0; }
-        .icon-link { color: #555; transition: 0.4s var(--bezier); }
-        .icon-link:hover { color: var(--white); transform: scale(1.4) translateZ(30px); }
+        .content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .tab.active .content { max-height: 300px; padding: 10px 0; }
 
-        .tab-content { max-height: 0; overflow: hidden; transition: 0.5s var(--bezier); }
-        .tab.active .tab-content { max-height: 500px; padding-bottom: 20px; }
-
-        /* --- PROJECT LINKS --- */
         .link {
-            padding: 16px;
-            margin-bottom: 8px;
-            background: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
             text-decoration: none;
-            color: #999;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 0.8rem;
-            transition: 0.4s var(--bezier);
+            color: #777;
+            font-size: 0.75rem;
+            transition: 0.3s;
         }
-        .link:hover { background: var(--white); color: #000; transform: translateX(5px); }
-        .link:active { transform: scale(0.98); }
+        .link:hover { color: var(--white); transform: translateX(5px); }
+        .link i { width: 16px; }
 
-        /* --- CONTACT MODAL --- */
-        #contactModal {
+        .socials { display: flex; justify-content: center; gap: 30px; padding: 15px 0; }
+        .socials a { color: #555; transition: 0.3s; }
+        .socials a:hover { color: var(--gold); }
+
+        footer {
+            margin-top: 30px;
+            font-family: var(--font-bold);
+            font-size: 0.45rem;
+            letter-spacing: 3px;
+            opacity: 0.3;
+        }
+
+        /* --- CONTACT SIDEBAR --- */
+        .contact-trigger {
             position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
+            right: 20px;
+            bottom: 20px;
+            font-family: var(--font-bold);
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+            transform: rotate(-90deg);
+            transform-origin: right bottom;
+            color: #444;
+            text-decoration: none;
+            transition: 0.3s;
         }
-        #contactModal.active { opacity: 1; pointer-events: auto; }
-        .modal-box {
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid var(--white);
-            padding: 40px;
-            background: #000;
-            transform: translateY(20px);
-            transition: transform 0.5s var(--bezier);
-        }
-        #contactModal.active .modal-box { transform: translateY(0); }
-
-        input, textarea {
-            width: 100%; background: #0a0a0a; border: 1px solid #222; color: white;
-            padding: 15px; margin-bottom: 12px; outline: none;
-        }
-        .send-btn {
-            width: 100%; padding: 15px; background: white; color: black; border: none;
-            font-family: var(--font-bold); font-size: 0.7rem; letter-spacing: 2px;
-        }
-
-        footer { margin-top: 40px; text-align: center; font-size: 0.5rem; opacity: 0.2; letter-spacing: 5px; }
-
+        .contact-trigger:hover { color: var(--gold); }
     </style>
 </head>
 <body>
 
+    <div class="sig-container">
+        <div class="sig-ring"></div>
+        <div class="sig-text">D<span class="sig-t">T</span></div>
+    </div>
+
     <div class="bg-canvas" id="grid"></div>
 
-    <div class="sidebar" onclick="openContact()">
-        <div class="burger-lines">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </div>
-        <a href="javascript:void(0)" class="side-trigger">CONTACT ME</a>
-    </div>
-
-    <div id="contactModal" onclick="closeContact()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <h2 style="font-family: var(--font-bold); font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 4px;">TERMINAL_MESSAGE</h2>
-            <input type="email" id="senderEmail" placeholder="YOUR EMAIL ADDRESS">
-            <input type="text" id="subject" placeholder="SUBJECT">
-            <textarea id="message" rows="5" placeholder="START TYPING..."></textarea>
-            <button class="send-btn" onclick="sendMail()">INITIALIZE SEND</button>
-            <p style="font-size: 0.5rem; color: #333; margin-top: 25px; text-align: center; letter-spacing: 2px;">CLICK ANYWHERE TO DISCARD</p>
-        </div>
-    </div>
-
-    <div class="wrapper" id="scene">
+    <div class="wrapper">
         <header>
-            <div class="pfp-frame">
-                <img src="https://img.sanishtech.com/u/66e2376dfe2b3e6a719a854a5ce2f6a7.jpg" alt="Dayan Tirmizi">
+            <div class="pfp">
+                <img src="https://img.sanishtech.com/u/66e2376dfe2b3e6a719a854a5ce2f6a7.jpg" alt="DT">
             </div>
             <h1>Dayan Tirmizi</h1>
-            <p style="font-size: 0.6rem; letter-spacing: 4px; color: #444; margin-top: 10px;">CORE ARCHITECT // PAKIPC</p>
         </header>
 
         <div class="tab-group">
-            <div class="tab active" id="net">
-                <button class="tab-header" onclick="toggle('net')">NETWORK <span>+</span></button>
-                <div class="tab-content">
-                    <div class="social-row">
-                        <a href="https://www.youtube.com/@Selfex200" target="_blank" class="icon-link"><i data-lucide="youtube" size="28"></i></a>
-                        <a href="https://discord.com/users/mcselfex" target="_blank" class="icon-link"><i data-lucide="message-square" size="28"></i></a>
-                        <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank" class="icon-link"><i data-lucide="instagram" size="28"></i></a>
-                    </div>
+            <div class="tab" id="projects">
+                <button class="tab-btn" onclick="toggle('projects')">PROJECTS <span>+</span></button>
+                <div class="content">
+                    <a href="https://www.pakipc.com" target="_blank" class="link"><i data-lucide="globe"></i> PAKIPC.COM</a>
+                    <a href="beaconhouse_report.xlsx.xlsx" download class="link"><i data-lucide="file-text"></i> BEACONHOUSE REPORT</a>
+                    <a href="DCB ORIGINAL FINAL.xlsx.xlsx" download class="link"><i data-lucide="briefcase"></i> DCB LOAN SYSTEM</a>
+                    <a href="vital_mart.xlsx.xlsx" download class="link"><i data-lucide="shopping-cart"></i> VITAL MART POS</a>
                 </div>
             </div>
 
-            <div class="tab" id="proj">
-                <button class="tab-header" onclick="toggle('proj')">PROJECTS <span>+</span></button>
-                <div class="tab-content">
-                    <a href="https://www.pakipc.com" target="_blank" class="link" style="border-left: 2px solid white;">
-                        <i data-lucide="globe"></i> PAKIPC.COM
-                    </a>
-                    <a href="beaconhouse_report.xlsx.xlsx" download="beaconhouse_report.xlsx" class="link">
-                        <i data-lucide="file-spreadsheet"></i> REPORT
-                    </a>
-                    <a href="DCB ORIGINAL FINAL.xlsx.xlsx" download="DCB_Loan_System.xlsx" class="link">
-                        <i data-lucide="shield-check"></i> LOAN SYSTEM
-                    </a>
-                    <a href="vital_mart.xlsx.xlsx" download="vital_mart_POS.xlsx" class="link">
-                        <i data-lucide="shopping-cart"></i> POS SYSTEM
-                    </a>
+            <div class="tab active" id="social">
+                <button class="tab-btn" onclick="toggle('social')">NETWORK <span>+</span></button>
+                <div class="content">
+                    <div class="socials">
+                        <a href="https://www.youtube.com/@Selfex200" target="_blank"><i data-lucide="youtube"></i></a>
+                        <a href="https://discord.com/users/mcselfex" target="_blank"><i data-lucide="message-square"></i></a>
+                        <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank"><i data-lucide="instagram"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <footer>V4.0 // DAYAN_TIRMIZI_OS</footer>
+        <footer>BUILT BY DAYAN TIRMIZI</footer>
     </div>
+
+    <a href="mailto:support@pakipc.com" class="contact-trigger">GET IN TOUCH</a>
 
     <script>
         lucide.createIcons();
-
-        function toggle(id) { document.getElementById(id).classList.toggle('active'); }
-        function openContact() { document.getElementById('contactModal').classList.add('active'); }
-        function closeContact() { document.getElementById('contactModal').classList.remove('active'); }
-
-        function sendMail() {
-            const email = document.getElementById('senderEmail').value;
-            const sub = document.getElementById('subject').value;
-            const msg = document.getElementById('message').value;
-            if(!email || !msg) { alert("Data required for transmission."); return; }
-            window.location.href = `mailto:support@pakipc.com?cc=lhgdayan@gmail.com&subject=${encodeURIComponent(sub)}&body=From: ${email}%0D%0A%0D%0A${encodeURIComponent(msg)}`;
-            closeContact();
+        function toggle(id) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
-        const grid = document.getElementById('grid');
-        const scene = document.getElementById('scene');
+        // Background effect
         document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth);
-            const y = (e.clientY / window.innerHeight);
-            grid.style.setProperty('--x', (x * 100) + '%');
-            grid.style.setProperty('--y', (y * 100) + '%');
-            scene.style.transform = `rotateX(${(y - 0.5) * -10}deg) rotateY(${(x - 0.5) * 10}deg)`;
+            document.getElementById('grid').style.setProperty('--x', (e.clientX / window.innerWidth * 100) + '%');
+            document.getElementById('grid').style.setProperty('--y', (e.clientY / window.innerHeight * 100) + '%');
         });
     </script>
 </body>
