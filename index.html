@@ -12,10 +12,9 @@
             --bg: #000000;
             --white: #ffffff;
             --gold: #FFD700;
-            --input-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.05);
             --font-bold: 'Syncopate', sans-serif;
-            --bezier: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair !important; }
@@ -30,240 +29,229 @@
             position: relative;
         }
 
-        /* --- RESTORED INTERACTIVE BACKGROUND --- */
-        .bg-canvas {
+        /* --- OPERA COMPATIBLE BACKGROUND --- */
+        #grid-bg {
             position: fixed;
             inset: 0;
             background-image: 
                 linear-gradient(var(--border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 50px 50px;
-            z-index: -1; /* Ensures it stays behind content */
-            mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 80%);
+            z-index: 1;
             pointer-events: none;
         }
 
-        /* --- DT LOGO --- */
+        .glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- SIGNATURE LOGO --- */
         .sig {
             position: fixed;
-            top: 40px;
-            left: 40px;
+            top: 30px;
+            left: 30px;
             z-index: 100;
             font-family: var(--font-bold);
-            font-size: 1.8rem;
-            letter-spacing: -2px;
+            font-size: 1.5rem;
         }
-        .sig span { color: var(--gold); position: relative; }
-        .sig span::after {
+        .sig-d { color: white; }
+        .sig-t { color: var(--gold); position: relative; }
+        .sig-t::after {
             content: '';
             position: absolute;
-            inset: -12px;
+            inset: -10px;
             border: 2px solid var(--gold);
             border-radius: 50%;
-            animation: orbit 4s linear infinite;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            animation: rotate 4s linear infinite;
         }
-        @keyframes orbit {
-            0% { transform: rotate(0deg) scale(1); border-radius: 50%; }
-            50% { transform: rotate(180deg) scale(1.1); border-radius: 30% 70% 70% 30%; }
-            100% { transform: rotate(360deg) scale(1); border-radius: 50%; }
-        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         main {
             display: flex;
             width: 100%;
             height: 100%;
-            align-items: center;
-            padding: 0 8%;
-            gap: 10%;
             z-index: 10;
+            padding: 0 5%;
+            align-items: center;
+            gap: 5%;
         }
 
-        /* --- LEFT: CONTACT FORM --- */
-        .contact-section {
+        /* --- LEFT: CONTACT (STAY OPEN) --- */
+        .contact-box {
             flex: 1;
-            max-width: 420px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.02);
+            max-width: 400px;
+            background: rgba(10, 10, 10, 0.8);
             border: 1px solid var(--border);
+            padding: 30px;
             backdrop-filter: blur(10px);
         }
-        .contact-section h2 {
+        .contact-box h2 {
             font-family: var(--font-bold);
-            font-size: 0.8rem;
-            letter-spacing: 6px;
-            margin-bottom: 30px;
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
             color: var(--gold);
         }
-        .form-group { margin-bottom: 20px; }
         input, textarea {
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--border);
-            padding: 15px;
+            padding: 12px;
             color: white;
-            font-family: 'Inter';
-            font-size: 0.85rem;
+            margin-bottom: 15px;
             outline: none;
-            transition: 0.4s var(--bezier);
         }
-        input:focus, textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
-        
         .send-btn {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             background: var(--gold);
             border: none;
-            color: black;
             font-family: var(--font-bold);
-            font-size: 0.65rem;
-            letter-spacing: 4px;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
             font-weight: bold;
-            transition: 0.4s var(--bezier);
+            transition: 0.3s;
         }
-        .send-btn:hover { background: var(--white); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .send-btn:hover { background: white; transform: translateY(-3px); }
 
         /* --- RIGHT: HUB --- */
-        .hub-section {
-            flex: 1;
-            max-width: 480px;
+        .hub-box {
+            flex: 1.2;
             text-align: right;
+            max-width: 500px;
         }
-        .pfp {
-            width: 120px; height: 120px;
-            border: 1px solid var(--white);
-            margin: 0 0 25px auto;
-            padding: 6px;
-            background: black;
+        .pfp-container {
+            width: 110px; height: 110px;
+            border: 1px solid white;
+            padding: 5px;
+            margin-left: auto;
+            margin-bottom: 20px;
         }
-        .pfp img { width: 100%; height: 100%; object-fit: cover; }
+        .pfp-container img { width: 100%; height: 100%; object-fit: cover; }
         
-        .name-title {
+        .name-header {
             font-family: var(--font-bold);
-            font-size: 1.4rem;
-            letter-spacing: 12px;
-            margin-bottom: 50px;
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            margin-bottom: 40px;
         }
 
-        /* --- ANIMATED DROPDOWNS --- */
-        .tab { border-top: 1px solid var(--border); }
-        .tab-trigger {
+        /* --- ACCORDION ANIMATION --- */
+        .accordion { border-top: 1px solid var(--border); }
+        .acc-btn {
             width: 100%;
-            padding: 25px 0;
             background: none;
             border: none;
             color: white;
+            padding: 20px 0;
             font-family: var(--font-bold);
-            font-size: 0.75rem;
-            letter-spacing: 5px;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.3s;
         }
-        .tab-trigger:hover { color: var(--gold); }
-        
-        .tab-content {
+        .acc-content {
             max-height: 0;
-            opacity: 0;
             overflow: hidden;
+            opacity: 0;
             transform: translateY(-10px);
-            transition: all 0.6s var(--bezier);
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .tab.active .tab-content {
-            max-height: 400px;
+        .accordion.active .acc-content {
+            max-height: 300px;
             opacity: 1;
             transform: translateY(0);
-            padding-bottom: 25px;
+            padding-bottom: 20px;
         }
 
-        .link-item {
+        .link-row {
             display: flex;
             align-items: center;
             justify-content: flex-end;
             gap: 15px;
-            padding: 12px 0;
-            color: #777;
+            padding: 10px 0;
             text-decoration: none;
-            font-size: 0.9rem;
+            color: #888;
+            font-size: 0.85rem;
             transition: 0.3s;
         }
-        .link-item:hover { color: var(--white); transform: translateX(-10px); }
+        .link-row:hover { color: white; transform: translateX(-10px); }
 
         .socials {
             display: flex;
-            gap: 30px;
             justify-content: flex-end;
+            gap: 25px;
             padding-top: 15px;
         }
-        .socials a { color: #444; transition: 0.4s; }
-        .socials a:hover { color: var(--gold); transform: scale(1.3); }
+        .socials a { color: #444; transition: 0.3s; }
+        .socials a:hover { color: var(--gold); transform: translateY(-3px); }
 
         footer {
             position: fixed;
-            bottom: 30px;
+            bottom: 20px;
             width: 100%;
             text-align: center;
             font-family: var(--font-bold);
-            font-size: 0.55rem;
-            letter-spacing: 6px;
-            opacity: 0.2;
+            font-size: 0.5rem;
+            letter-spacing: 4px;
+            opacity: 0.3;
         }
-
     </style>
 </head>
 <body>
 
-    <div class="bg-canvas" id="grid"></div>
+    <div id="grid-bg"></div>
+    <div class="glow" id="mouse-glow"></div>
 
-    <div class="sig">D<span>T</span></div>
+    <div class="sig">
+        <span class="sig-d">D</span><span class="sig-t">T</span>
+    </div>
 
     <main>
-        <section class="contact-section">
-            <h2>CONTACT</h2>
+        <section class="contact-box">
+            <h2>GET IN TOUCH</h2>
             <form action="https://formspree.io/f/support@pakipc.com" method="POST">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="FULL NAME" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
-                </div>
-                <div class="form-group">
-                    <textarea name="message" rows="4" placeholder="MESSAGE"></textarea>
-                </div>
-                <button type="submit" class="send-btn">SEND INQUIRY</button>
+                <input type="text" name="name" placeholder="NAME" required>
+                <input type="email" name="email" placeholder="EMAIL" required>
+                <textarea name="message" rows="4" placeholder="MESSAGE"></textarea>
+                <button type="submit" class="send-btn">SEND MESSAGE</button>
             </form>
         </section>
 
-        <section class="hub-section">
-            <div class="pfp">
-                <img src="https://img.sanishtech.com/u/66e2376dfe2b3e6a719a854a5ce2f6a7.jpg" alt="Dayan Tirmizi">
+        <section class="hub-box">
+            <div class="pfp-container">
+                <img src="https://img.sanishtech.com/u/66e2376dfe2b3e6a719a854a5ce2f6a7.jpg" alt="Dayan">
             </div>
-            <h1 class="name-title">Dayan Tirmizi</h1>
+            <h1 class="name-header">Dayan Tirmizi</h1>
 
-            <div class="tab-group">
-                <div class="tab active" id="proj">
-                    <button class="tab-trigger" onclick="toggle('proj')">
-                        <i data-lucide="chevron-right"></i> PROJECTS
-                    </button>
-                    <div class="tab-content">
-                        <a href="https://www.pakipc.com" target="_blank" class="link-item">PAKIPC.COM <i data-lucide="external-link"></i></a>
-                        <a href="beaconhouse_report.xlsx.xlsx" download class="link-item">BEACONHOUSE REPORT <i data-lucide="file-spreadsheet"></i></a>
-                        <a href="DCB ORIGINAL FINAL.xlsx.xlsx" download class="link-item">DCB LOAN SYSTEM <i data-lucide="database"></i></a>
-                        <a href="vital_mart.xlsx.xlsx" download class="link-item">VITAL MART POS <i data-lucide="shopping-cart"></i></a>
-                    </div>
+            <div class="accordion active" id="p-tab">
+                <button class="acc-btn" onclick="toggleAcc('p-tab')">
+                    <i data-lucide="chevron-right"></i> PROJECTS
+                </button>
+                <div class="acc-content">
+                    <a href="https://www.pakipc.com" target="_blank" class="link-row">PAKIPC.COM <i data-lucide="globe"></i></a>
+                    <a href="./beaconhouse_report.xlsx.xlsx" download="Dayan_Report.xlsx" class="link-row">REPORT <i data-lucide="file-text"></i></a>
+                    <a href="./DCB ORIGINAL FINAL.xlsx.xlsx" download="DCB_Loan_System.xlsx" class="link-row">DCB LOAN SYSTEM <i data-lucide="shield"></i></a>
+                    <a href="./vital_mart.xlsx.xlsx" download="Vital_Mart_POS.xlsx" class="link-row">VITAL MART POS <i data-lucide="shopping-cart"></i></a>
                 </div>
+            </div>
 
-                <div class="tab" id="net">
-                    <button class="tab-trigger" onclick="toggle('net')">
-                        <i data-lucide="chevron-right"></i> NETWORK
-                    </button>
-                    <div class="tab-content">
-                        <div class="socials">
-                            <a href="https://www.youtube.com/@Selfex200" target="_blank"><i data-lucide="youtube"></i></a>
-                            <a href="https://discord.com/users/mcselfex" target="_blank"><i data-lucide="message-square"></i></a>
-                            <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank"><i data-lucide="instagram"></i></a>
-                        </div>
+            <div class="accordion" id="n-tab">
+                <button class="acc-btn" onclick="toggleAcc('n-tab')">
+                    <i data-lucide="chevron-right"></i> NETWORK
+                </button>
+                <div class="acc-content">
+                    <div class="socials">
+                        <a href="https://www.youtube.com/@Selfex200" target="_blank"><i data-lucide="youtube"></i></a>
+                        <a href="https://discord.com/users/mcselfex" target="_blank"><i data-lucide="message-square"></i></a>
+                        <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank"><i data-lucide="instagram"></i></a>
                     </div>
                 </div>
             </div>
@@ -275,24 +263,15 @@
     <script>
         lucide.createIcons();
 
-        function toggle(id) {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => {
-                if(t.id === id) {
-                    t.classList.toggle('active');
-                } else {
-                    t.classList.remove('active');
-                }
-            });
+        function toggleAcc(id) {
+            document.querySelectorAll('.accordion').forEach(a => a.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
-        // GRID TRACKER
+        const glow = document.getElementById('mouse-glow');
         document.addEventListener('mousemove', (e) => {
-            const grid = document.getElementById('grid');
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            grid.style.setProperty('--x', x + '%');
-            grid.style.setProperty('--y', y + '%');
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
         });
     </script>
 </body>
