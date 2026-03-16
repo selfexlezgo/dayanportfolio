@@ -12,8 +12,8 @@
             --bg: #000000;
             --white: #ffffff;
             --gold: #FFD700;
-            --accent: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.12);
             --font-bold: 'Syncopate', sans-serif;
             --bezier: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -24,233 +24,275 @@
             background: var(--bg);
             color: var(--white);
             font-family: 'Inter', sans-serif;
-            height: 100vh; /* Fixed height to prevent body scroll */
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
-            perspective: 1200px;
+            position: relative;
         }
 
-        /* --- SIGNATURE LOGO (TOP LEFT) --- */
-        .signature-logo {
+        /* --- RESTORED INTERACTIVE BACKGROUND --- */
+        .bg-canvas {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            z-index: 200;
-            display: flex;
-            align-items: center;
-            font-family: var(--font-bold);
-            font-size: 1.6rem;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1; /* Ensures it stays behind content */
+            mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 80%);
+            pointer-events: none;
         }
-        .sig-d { color: var(--white); }
-        .sig-t { color: var(--gold); position: relative; margin-left: 2px; }
-        
-        /* COOL ANIMATION AROUND T */
-        .sig-t::after {
+
+        /* --- DT LOGO --- */
+        .sig {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+            font-family: var(--font-bold);
+            font-size: 1.8rem;
+            letter-spacing: -2px;
+        }
+        .sig span { color: var(--gold); position: relative; }
+        .sig span::after {
             content: '';
             position: absolute;
             inset: -12px;
             border: 2px solid var(--gold);
             border-radius: 50%;
-            animation: orbit 3s linear infinite;
-            box-shadow: 0 0 15px var(--gold);
+            animation: orbit 4s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
-
         @keyframes orbit {
-            0% { transform: rotate(0deg) scale(1); opacity: 0.4; border-radius: 50%; }
-            50% { transform: rotate(180deg) scale(1.2); opacity: 1; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            100% { transform: rotate(360deg) scale(1); opacity: 0.4; border-radius: 50%; }
+            0% { transform: rotate(0deg) scale(1); border-radius: 50%; }
+            50% { transform: rotate(180deg) scale(1.1); border-radius: 30% 70% 70% 30%; }
+            100% { transform: rotate(360deg) scale(1); border-radius: 50%; }
         }
 
-        /* --- GRID BACKGROUND --- */
-        .bg-canvas {
-            position: fixed;
-            inset: -50px;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: -1;
-            mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 80%);
-        }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            position: fixed;
-            right: 0; top: 0; bottom: 0;
-            width: 70px;
+        main {
             display: flex;
-            flex-direction: column;
+            width: 100%;
+            height: 100%;
             align-items: center;
-            justify-content: center;
-            z-index: 100;
-            border-left: 1px solid var(--border);
-            background: rgba(255,255,255,0.02);
+            padding: 0 8%;
+            gap: 10%;
+            z-index: 10;
         }
-        .side-trigger {
-            writing-mode: vertical-rl;
-            text-transform: uppercase;
+
+        /* --- LEFT: CONTACT FORM --- */
+        .contact-section {
+            flex: 1;
+            max-width: 420px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        .contact-section h2 {
+            font-family: var(--font-bold);
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            margin-bottom: 30px;
+            color: var(--gold);
+        }
+        .form-group { margin-bottom: 20px; }
+        input, textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            padding: 15px;
+            color: white;
+            font-family: 'Inter';
+            font-size: 0.85rem;
+            outline: none;
+            transition: 0.4s var(--bezier);
+        }
+        input:focus, textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); }
+        
+        .send-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gold);
+            border: none;
+            color: black;
+            font-family: var(--font-bold);
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            font-weight: bold;
+            transition: 0.4s var(--bezier);
+        }
+        .send-btn:hover { background: var(--white); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+
+        /* --- RIGHT: HUB --- */
+        .hub-section {
+            flex: 1;
+            max-width: 480px;
+            text-align: right;
+        }
+        .pfp {
+            width: 120px; height: 120px;
+            border: 1px solid var(--white);
+            margin: 0 0 25px auto;
+            padding: 6px;
+            background: black;
+        }
+        .pfp img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .name-title {
+            font-family: var(--font-bold);
+            font-size: 1.4rem;
+            letter-spacing: 12px;
+            margin-bottom: 50px;
+        }
+
+        /* --- ANIMATED DROPDOWNS --- */
+        .tab { border-top: 1px solid var(--border); }
+        .tab-trigger {
+            width: 100%;
+            padding: 25px 0;
+            background: none;
+            border: none;
+            color: white;
             font-family: var(--font-bold);
             font-size: 0.75rem;
             letter-spacing: 5px;
-            color: var(--white);
-            text-decoration: none;
-            opacity: 0.6;
-            transition: 0.4s;
-        }
-        .side-trigger:hover { opacity: 1; color: var(--gold); letter-spacing: 8px; }
-
-        /* --- MAIN WRAPPER (Sized to fit screen) --- */
-        .wrapper {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            z-index: 10;
-            transform-style: preserve-3d;
-            height: 90vh; /* Keeps content within view */
-        }
-
-        header { text-align: center; margin-bottom: 30px; }
-        .pfp-frame {
-            width: 110px; height: 110px;
-            margin: 0 auto 20px;
-            border: 1px solid var(--white);
-            padding: 5px;
-            background: #000;
-        }
-        .pfp-frame img { width: 100%; height: 100%; object-fit: cover; }
-        h1 { font-family: var(--font-bold); font-size: 1.1rem; letter-spacing: 8px; text-transform: uppercase; }
-
-        /* --- TABS --- */
-        .tab-header {
-            padding: 20px 0;
             display: flex;
             justify-content: space-between;
-            background: none;
-            border: none;
-            width: 100%;
-            color: var(--white);
-            font-family: var(--font-bold);
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            border-top: 1px solid var(--border);
-            cursor: pointer !important;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .tab-trigger:hover { color: var(--gold); }
+        
+        .tab-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-10px);
+            transition: all 0.6s var(--bezier);
+        }
+        .tab.active .tab-content {
+            max-height: 400px;
+            opacity: 1;
+            transform: translateY(0);
+            padding-bottom: 25px;
         }
 
-        .tab-content { max-height: 0; overflow: hidden; transition: 0.6s var(--bezier); }
-        .tab.active .tab-content { max-height: 280px; padding-bottom: 20px; }
-
-        /* --- LINKS --- */
-        .link {
-            padding: 14px;
-            margin-bottom: 8px;
-            background: var(--accent);
-            text-decoration: none;
-            color: #999;
+        .link-item {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 15px;
-            font-size: 0.8rem;
-            transition: 0.4s var(--bezier);
-            border: 1px solid transparent;
+            padding: 12px 0;
+            color: #777;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
         }
-        .link:hover { background: var(--white); color: #000; border-color: var(--gold); transform: scale(1.02); }
+        .link-item:hover { color: var(--white); transform: translateX(-10px); }
 
-        .social-row { display: flex; justify-content: center; gap: 40px; padding: 20px 0; }
-        .icon-link { color: #555; transition: 0.4s var(--bezier); }
-        .icon-link:hover { color: var(--gold); transform: scale(1.4); }
+        .socials {
+            display: flex;
+            gap: 30px;
+            justify-content: flex-end;
+            padding-top: 15px;
+        }
+        .socials a { color: #444; transition: 0.4s; }
+        .socials a:hover { color: var(--gold); transform: scale(1.3); }
 
         footer {
-            margin-top: auto;
-            padding-top: 20px;
+            position: fixed;
+            bottom: 30px;
+            width: 100%;
             text-align: center;
             font-family: var(--font-bold);
             font-size: 0.55rem;
-            letter-spacing: 5px;
-            opacity: 0.4;
-            text-transform: uppercase;
+            letter-spacing: 6px;
+            opacity: 0.2;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="signature-logo">
-        <span class="sig-d">D</span><span class="sig-t">T</span>
-    </div>
-
     <div class="bg-canvas" id="grid"></div>
 
-    <div class="sidebar">
-        <a href="mailto:support@pakipc.com" class="side-trigger">GET IN TOUCH</a>
-    </div>
+    <div class="sig">D<span>T</span></div>
 
-    <div class="wrapper" id="scene">
-        <header>
-            <div class="pfp-frame">
+    <main>
+        <section class="contact-section">
+            <h2>CONTACT</h2>
+            <form action="https://formspree.io/f/support@pakipc.com" method="POST">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="FULL NAME" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" rows="4" placeholder="MESSAGE"></textarea>
+                </div>
+                <button type="submit" class="send-btn">SEND INQUIRY</button>
+            </form>
+        </section>
+
+        <section class="hub-section">
+            <div class="pfp">
                 <img src="https://img.sanishtech.com/u/66e2376dfe2b3e6a719a854a5ce2f6a7.jpg" alt="Dayan Tirmizi">
             </div>
-            <h1>Dayan Tirmizi</h1>
-        </header>
+            <h1 class="name-title">Dayan Tirmizi</h1>
 
-        <div class="tab-group">
-            <div class="tab" id="net">
-                <button class="tab-header" onclick="toggle('net')">NETWORK <span>+</span></button>
-                <div class="tab-content">
-                    <div class="social-row">
-                        <a href="https://www.youtube.com/@Selfex200" target="_blank" class="icon-link"><i data-lucide="youtube"></i></a>
-                        <a href="https://discord.com/users/mcselfex" target="_blank" class="icon-link"><i data-lucide="message-square"></i></a>
-                        <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank" class="icon-link"><i data-lucide="instagram"></i></a>
+            <div class="tab-group">
+                <div class="tab active" id="proj">
+                    <button class="tab-trigger" onclick="toggle('proj')">
+                        <i data-lucide="chevron-right"></i> PROJECTS
+                    </button>
+                    <div class="tab-content">
+                        <a href="https://www.pakipc.com" target="_blank" class="link-item">PAKIPC.COM <i data-lucide="external-link"></i></a>
+                        <a href="beaconhouse_report.xlsx.xlsx" download class="link-item">BEACONHOUSE REPORT <i data-lucide="file-spreadsheet"></i></a>
+                        <a href="DCB ORIGINAL FINAL.xlsx.xlsx" download class="link-item">DCB LOAN SYSTEM <i data-lucide="database"></i></a>
+                        <a href="vital_mart.xlsx.xlsx" download class="link-item">VITAL MART POS <i data-lucide="shopping-cart"></i></a>
+                    </div>
+                </div>
+
+                <div class="tab" id="net">
+                    <button class="tab-trigger" onclick="toggle('net')">
+                        <i data-lucide="chevron-right"></i> NETWORK
+                    </button>
+                    <div class="tab-content">
+                        <div class="socials">
+                            <a href="https://www.youtube.com/@Selfex200" target="_blank"><i data-lucide="youtube"></i></a>
+                            <a href="https://discord.com/users/mcselfex" target="_blank"><i data-lucide="message-square"></i></a>
+                            <a href="https://www.instagram.com/dayan.tirmizi/" target="_blank"><i data-lucide="instagram"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <div class="tab active" id="proj">
-                <button class="tab-header" onclick="toggle('proj')">PROJECTS <span>+</span></button>
-                <div class="tab-content">
-                    <a href="https://www.pakipc.com" target="_blank" class="link">
-                        <i data-lucide="globe"></i> PAKIPC.COM
-                    </a>
-                    <a href="beaconhouse_report.xlsx.xlsx" download="Dayan_Report.xlsx" class="link">
-                        <i data-lucide="file-spreadsheet"></i> BEACONHOUSE REPORT
-                    </a>
-                    <a href="DCB ORIGINAL FINAL.xlsx.xlsx" download="DCB_Loan_System.xlsx" class="link">
-                        <i data-lucide="shield-check"></i> DCB LOAN SYSTEM
-                    </a>
-                    <a href="vital_mart.xlsx.xlsx" download="VitalMart_POS.xlsx" class="link">
-                        <i data-lucide="shopping-cart"></i> VITAL MART POS
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <footer>Built by Dayan Tirmizi</footer>
-    </div>
+    <footer>BUILT BY DAYAN TIRMIZI</footer>
 
     <script>
         lucide.createIcons();
 
         function toggle(id) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                if(t.id === id) {
+                    t.classList.toggle('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
         }
 
-        const grid = document.getElementById('grid');
-        const scene = document.getElementById('scene');
-        
+        // GRID TRACKER
         document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth);
-            const y = (e.clientY / window.innerHeight);
-            
-            grid.style.setProperty('--x', (x * 100) + '%');
-            grid.style.setProperty('--y', (y * 100) + '%');
-            
-            // Subtle 3D tilt effect
-            const rotateX = (y - 0.5) * -12;
-            const rotateY = (x - 0.5) * 12;
-            scene.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            const grid = document.getElementById('grid');
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            grid.style.setProperty('--x', x + '%');
+            grid.style.setProperty('--y', y + '%');
         });
     </script>
 </body>
